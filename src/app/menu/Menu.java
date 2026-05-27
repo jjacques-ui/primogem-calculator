@@ -18,15 +18,17 @@ public class Menu {
     private RewardService rewardService;
     private AccountService accountService;
 
-    public Menu(Game g){
+    public Menu(Game g) {
         this.game = g;
         this.rewardService = new RewardService();
+        this.accountService = new AccountService();
     }
 
     public void start() {
         int option;
 
         do {
+            clearScreen();
             showGameMenu();
 
             option = readInt();
@@ -49,7 +51,6 @@ public class Menu {
     }
 
     private void showGameMenu() {
-        clearScreen();
         System.out.println("\n=== PRIMO CALC ===");
         System.out.println("\nSelect game");
         System.out.println("\n1)"+game.getName());
@@ -61,6 +62,7 @@ public class Menu {
         int option;
 
         do {
+        clearScreen();
             System.out.println("\n=== PRIMO CALC ===");
             System.out.println("\n1)Check accounts");
             System.out.println("2)Config game");
@@ -86,13 +88,13 @@ public class Menu {
         } while(option != 0);
     }
 
-    private void gameConfigMenu(){
-        clearScreen();
+    private void gameConfigMenu() {
         int option;
 
         do {
+        clearScreen();
             System.out.println("\n=== GAME CONFIG ===");
-            System.out.println("Game: "+game.getName());
+            System.out.println("Game: " + game.getName());
             System.out.println("\n1)Add new reward source");
             System.out.println("2)Add new pulling goal");
             System.out.println("3)Add new account");
@@ -121,10 +123,9 @@ public class Menu {
         } while(option != 0);
     }
 
-    private void createRewardSource(){
-        clearScreen();
-
+    private void createRewardSource() {
         do {
+            clearScreen();
             System.out.println("Name the reward source: ");
             String name = readString();
 
@@ -136,14 +137,13 @@ public class Menu {
             game.getAvailableRewards().add(rS);
 
             System.out.println("\nReward created!");
-            System.out.println(name+" - "+reward+"✦");
+            System.out.println(name + " - " + reward + "✦");
 
         } while(askRepeat("reward source"));
     }
-    private void createGoal(){
-        clearScreen();
-
+    private void createGoal() {
         do {
+            clearScreen();
             System.out.println("Name the goal: ");
             String name = readString();
 
@@ -155,14 +155,13 @@ public class Menu {
             game.getAvailableGoals().add(g);
 
             System.out.println("\nGoal created!");
-            System.out.println(name+" - "+price+"✦");
+            System.out.println(name + " - " + price + "✦");
 
         } while(askRepeat("pulling goal"));
     }
     private void createAccount(){
-        clearScreen();
-
         do {
+            clearScreen();
             System.out.println("Account's username: ");
             String username = readString();
 
@@ -177,7 +176,7 @@ public class Menu {
             game.getAccounts().add(a);
 
             System.out.println("\nAccount created!");
-            System.out.println(username+" - "+balance+"✦ - Pity: "+pity);
+            System.out.println(username + " - " + balance + "✦ - Pity: " + pity);
 
         } while(askRepeat("account"));
     }
@@ -215,8 +214,7 @@ public class Menu {
         int option;
 
         do {
-            System.out.println("\n=== ACCOUNT: "+a.getUsername()+" ===");
-            System.out.println("Game: "+game.getName()+"\n");
+            printAccountHeader(a);
             System.out.println("1) Check reward sources list");
             System.out.println("2) Check progress");
             System.out.println("3) Set account's values");
@@ -250,12 +248,10 @@ public class Menu {
         List<AccountRewardSource> rSources = a.getRewardSources();
 
         do {
-            System.out.println("\n=== ACCOUNT: "+a.getUsername()+" ===");
-            System.out.println("Game: "+game.getName()+"\n");
-
+            printAccountHeader(a);
             for(int i = 0; i < rSources.size(); i++) {
                 if(!rSources.get(i).isRedeemed()){
-                    System.out.println((i+1)+") "+rSources.get(i).getName()+"x"+rSources.get(i).getQuantity()+" - "+rSources.get(i).getRewardAmount()+"✦");
+                    System.out.println((i+1) + ") "+rSources.get(i).getName() + "x" + rSources.get(i).getQuantity() + " - " + rSources.get(i).getRewardAmount() + "✦");
                 }
             }
 
@@ -265,7 +261,6 @@ public class Menu {
             option = readInt();
 
             if(option > 0 && option <= rSources.size()) {
-                
                 AccountRewardSource selected = rSources.get(option-1);
                 rewardSourceMenu(selected, a);
                 break;
@@ -281,12 +276,10 @@ public class Menu {
         int option;
 
         do {
-            System.out.println("\n=== SOURCE: "+r.getName()+" ===");
-            System.out.println("Game: "+game.getName()+"\n");
-
-            System.out.println(r.getName()+"x"+r.getQuantity()+" - "+r.getRewardAmount()+"✦");
-            System.out.println("Redeemed: "+r.getRedeemedQuantity()+"; Remaining - "+r.getRemainingRedeemed());
-            System.out.println("Total primogems - "+r.getTotalReward());
+            printAccountHeader(a);
+            System.out.println(r.getName() + "x" + r.getQuantity() + " - " + r.getRewardAmount() + "✦");
+            System.out.println("Redeemed: " + r.getRedeemedQuantity() + "; Remaining - " + r.getRemainingRedeemed());
+            System.out.println("Total primogems - " + r.getTotalReward());
 
             if (!r.isRedeemed()) {
                 System.out.println("\n1) Mark as redeemed");
@@ -331,13 +324,12 @@ public class Menu {
         int option;
 
         do {
-            System.out.println("\n=== ACCOUNT: "+a.getUsername()+" ===");
-            System.out.println("Game: "+game.getName()+"\n");
-            System.out.println("Progress - "+a.getProgressPercentage()+"% / 100%");
-            System.out.println("Balance: "+a.getBalance()+"✦ ("+toWishes(a.getBalance())+" wishes)");
-            System.out.println("Goal: "+a.getCurrentGoal().getName()+" - "+a.getCurrentGoal().getTotalPrice()+"✦ ("+toWishes(a.getCurrentGoal().getPrice())+" wishes)");
-            System.out.println("\nRemaining: "+a.getRemainingAmount()+"✦ ("+toWishes(a.getRemainingAmount())+" wishes)");
-            System.out.println("\nAvaiable rewards: "+a.getAllRewards()+"✦ ("+toWishes(a.getAllRewards())+" wishes)");
+            printAccountHeader(a);
+            System.out.println("Progress - " + a.getProgressPercentage() + "% / 100%");
+            System.out.println("Balance: " + a.getBalance() + "✦ (" + toWishes(a.getBalance()) + " wishes)");
+            System.out.println("Goal: " + a.getCurrentGoal().getName() + " - " + a.getCurrentGoal().getTotalPrice() + "✦ (" + toWishes(a.getCurrentGoal().getPrice()) + " wishes)");
+            System.out.println("\nRemaining: " + a.getRemainingAmount() + "✦ (" + toWishes(a.getRemainingAmount()) + " wishes)");
+            System.out.println("\nAvaiable rewards: " + a.getAllRewards() + "✦ (" + toWishes(a.getAllRewards()) + " wishes)");
 
             System.out.println("0) Back");
             System.out.println("Select: ");
@@ -358,7 +350,7 @@ public class Menu {
         int option;
 
         do {
-            System.out.println("\n=== ACCOUNT: "+a.getUsername()+" ===");
+            printAccountHeader(a);
             System.out.println("\n1)Set currency balance");
             System.out.println("2)Set current pity");
             System.out.println("3)Set current objective");
@@ -401,10 +393,11 @@ public class Menu {
         List<GoalTemplate> goals = game.getAvailableGoals();
 
         do {
+            printAccountHeader(a);
             System.out.println("\n=== AVAIABLE GOALS ===");
-            System.out.println("Game: "+game.getName()+"\n");
+
             for(int i = 0; i < goals.size(); i++) {
-                System.out.println((i+1)+") "+goals.get(i).getName());
+                System.out.println((i+1)+") " + goals.get(i).getName());
             }
             System.out.println("0) Back");
             System.out.println("Select: ");
@@ -430,11 +423,10 @@ public class Menu {
         clearScreen();
         int option;
         List<RewardTemplate> templates = game.getAvailableRewards();
-        //Adicionar comparação, caso esteja na lista padrão de game, listar como presente e definir a quantidade, se não, não marcar como presente
 
         do {
-            System.out.println("\n=== ACCOUNT: "+a.getUsername()+" ===");
-            System.out.println("Game: "+game.getName()+"\n");
+            printAccountHeader(a);
+            System.out.println("=== REWARD TEMPLATES ===");
 
             for(int i = 0; i < templates.size(); i++) {
 
@@ -458,12 +450,11 @@ public class Menu {
                 AccountRewardSource existing = accountService.findReward(a, selected);
 
                 if (existing != null) {
-                    a.getRewardSources().remove(existing);
+                    accountService.removeReward(a, existing);
                 } else {
                     System.out.println("How many: ");
                     int quantity = readInt();
-                    AccountRewardSource ar = new AccountRewardSource(selected, quantity);
-                    a.getRewardSources().add(null);
+                    accountService.addReward(a, selected, quantity);
                 }
                 break;
             } else if (option == 0) {
@@ -507,5 +498,10 @@ public class Menu {
         for(int i = 0; i < 40; i++) {
             System.out.println();
         }
+    }
+
+    private void printAccountHeader(Account a){
+        System.out.println("\n=== ACCOUNT: " + a.getUsername()+" ===");
+        System.out.println("Game: "+game.getName() + "\n");
     }
 }
