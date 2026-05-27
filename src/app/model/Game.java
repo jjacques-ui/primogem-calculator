@@ -1,11 +1,11 @@
 package app.model;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
     private String name;
-    private ArrayList<Account> accounts;
-    private ArrayList<Goal> availableGoals;
-    private ArrayList<RewardSource> availableRewards;
+    private List<Account> accounts;
+    private List<GoalTemplate> availableGoals;
+    private List<RewardTemplate> availableRewards;
 
     public Game(String n){
         this.name = n;
@@ -15,15 +15,15 @@ public class Game {
         return name;
     }
 
-    public ArrayList<Account> getAccounts() {
+    public List<Account> getAccounts() {
         return accounts;
     }
 
-    public ArrayList<RewardSource> getAvailableRewards() {
+    public List<RewardTemplate> getAvailableRewards() {
         return availableRewards;
     }
 
-    public ArrayList<Goal> getAvailableGoals() {
+    public List<GoalTemplate> getAvailableGoals() {
         return availableGoals;
     }
 }

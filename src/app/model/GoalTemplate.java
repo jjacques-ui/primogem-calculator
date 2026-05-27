@@ -1,10 +1,10 @@
 package app.model;
 
-public class Goal{
+public class GoalTemplate{
     private String name;
     private int price;
 
-    public Goal(String n, int p){
+    public GoalTemplate(String n, int p){
         this.name = n;
         this.price = p;
     }

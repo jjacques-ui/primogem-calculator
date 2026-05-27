@@ -1,12 +1,12 @@
 package app.model;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Account {
     private String username;
     private int balance;
     private int pity;
-    private Goal currentGoal;
-    private ArrayList<RewardSource> rewardSources;
+    private AccountGoal currentGoal;
+    private List<AccountRewardSource> rewardSources;
 
     public Account(String u, int b, int p){
         this.username = u;
@@ -21,11 +21,11 @@ public class Account {
         this.balance -= s;
     }
 
-    public void setCurrentGoal(Goal currentGoal) {
+    public void setCurrentGoal(AccountGoal currentGoal) {
         this.currentGoal = currentGoal;
     }
 
-    public Goal getCurrentGoal() {
+    public AccountGoal getCurrentGoal() {
         return currentGoal;
     }
 
@@ -48,19 +48,23 @@ public class Account {
         this.pity = pity;
     }
 
-    public ArrayList<RewardSource> getRewardSources() {
+    public int getRemainingAmount(){
+        return this.getCurrentGoal().getTotalPrice() - this.getBalance() - (this.getPity() * 160);
+    }
+
+    public List<AccountRewardSource> getRewardSources() {
         return rewardSources;
     }
 
     public double getProgressPercentage() {
-        return ((double) balance / currentGoal.getPrice()) * 100;
+        return ((double) (this.balance + (this.pity * 160)) / currentGoal.getTotalPrice()) * 100;
     }
 
     public int getAllRewards(){
         int total = 0;
         for(int i = 0; i < rewardSources.size(); i++) {
             if (!rewardSources.get(i).isRedeemed()) {
-                total += rewardSources.get(i).getReward();
+                total += rewardSources.get(i).getRewardAmount();
             }
         }
         return total;

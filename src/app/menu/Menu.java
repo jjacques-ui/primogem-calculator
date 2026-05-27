@@ -1,20 +1,26 @@
 package app.menu;
 
 import app.model.Account;
+import app.model.AccountGoal;
+import app.model.AccountRewardSource;
 import app.model.Game;
-import app.model.RewardSource;
-import app.model.Goal;
+import app.model.RewardTemplate;
+import app.model.GoalTemplate;
+import app.service.AccountService;
+import app.service.RewardService;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
     Scanner sc = new Scanner(System.in);
     private Game game;
-    
+    private RewardService rewardService;
+    private AccountService accountService;
 
     public Menu(Game g){
         this.game = g;
+        this.rewardService = new RewardService();
     }
 
     public void start() {
@@ -23,7 +29,7 @@ public class Menu {
         do {
             showGameMenu();
 
-            option = sc.nextInt();
+            option = readInt();
 
             switch(option) {
 
@@ -36,14 +42,14 @@ public class Menu {
                 break;
 
             default:
-                System.out.println("Invalid option!");
-                break;
+                invalidOption();
             }
 
         } while(option != 0);
     }
 
     private void showGameMenu() {
+        clearScreen();
         System.out.println("\n=== PRIMO CALC ===");
         System.out.println("\nSelect game");
         System.out.println("\n1)"+game.getName());
@@ -61,7 +67,7 @@ public class Menu {
             System.out.println("0)Back");
             System.out.println("Select: ");
 
-            option = sc.nextInt();
+            option = readInt();
 
             switch(option) {
 
@@ -74,14 +80,14 @@ public class Menu {
                 case 0:
                     break;
                 default:
-                System.out.println("Invalid option!");
-                break;
+                invalidOption();
             }
 
         } while(option != 0);
     }
 
     private void gameConfigMenu(){
+        clearScreen();
         int option;
 
         do {
@@ -93,7 +99,7 @@ public class Menu {
             System.out.println("0)Back");
             System.out.println("Select: ");
 
-            option = sc.nextInt();
+            option = readInt();
 
             switch(option) {
 
@@ -109,99 +115,62 @@ public class Menu {
                 case 0: 
                     break;
                 default:
-                System.out.println("Invalid option!");
-                break;
-                
+                invalidOption();                
             }
 
         } while(option != 0);
     }
 
     private void createRewardSource(){
-        int option;
+        clearScreen();
 
         do {
             System.out.println("Name the reward source: ");
-            String name = sc.nextLine();
+            String name = readString();
 
             System.out.println("Reward amount: ");
-            int reward = sc.nextInt();
+            int reward = readInt();
 
-            RewardSource rS = new RewardSource(name, reward);
+            RewardTemplate rS = new RewardTemplate(name, reward);
 
             game.getAvailableRewards().add(rS);
 
             System.out.println("\nReward created!");
             System.out.println(name+" - "+reward+"✦");
-            System.out.println("\nDo you want to add another reward source?");
-            System.out.println("1) Yes - 2) No");
-            System.out.println("Select: ");
 
-            option = sc.nextInt();
-
-            switch(option) {
-
-                case 1:
-                    System.out.println("\nRepitindo processo!\n");
-                    break;
-                case 2:
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    break;
-                
-            }
-        } while(option != 2);
+        } while(askRepeat("reward source"));
     }
     private void createGoal(){
-        int option;
+        clearScreen();
 
         do {
-            System.out.println("Name the reward source: ");
-            String name = sc.nextLine();
+            System.out.println("Name the goal: ");
+            String name = readString();
 
             System.out.println("Goal price: ");
-            int price = sc.nextInt();
+            int price = readInt();;
 
-            Goal g = new Goal(name, price);
+            GoalTemplate g = new GoalTemplate(name, price);
 
             game.getAvailableGoals().add(g);
 
             System.out.println("\nGoal created!");
             System.out.println(name+" - "+price+"✦");
-            System.out.println("\nDo you want to add another pulling goal?");
-            System.out.println("1) Yes - 2) No");
-            System.out.println("Select: ");
 
-            option = sc.nextInt();
-
-            switch(option) {
-
-                case 1:
-                    System.out.println("\nRepitindo processo!\n");
-                    break;
-                case 2:
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    break;
-                
-            }
-
-        } while(option != 2);
+        } while(askRepeat("pulling goal"));
     }
     private void createAccount(){
-        int option;
+        clearScreen();
 
         do {
             System.out.println("Account's username: ");
-            String username = sc.nextLine();
+            String username = readString();
 
             System.out.println("Current primogem balance: ");
-            int balance = sc.nextInt();
+            int balance = readInt();
 
             System.out.println("Current banner pity: ");
-            int pity = sc.nextInt();
+            int pity = readInt();
 
             Account a = new Account(username, balance, pity);
 
@@ -209,31 +178,14 @@ public class Menu {
 
             System.out.println("\nAccount created!");
             System.out.println(username+" - "+balance+"✦ - Pity: "+pity);
-            System.out.println("\nDo you want to add another account?");
-            System.out.println("1) Yes - 2) No");
-            System.out.println("Select: ");
 
-            option = sc.nextInt();
-
-            switch(option) {
-
-                case 1:
-                    System.out.println("\nRepitindo processo!\n");
-                    break;
-                case 2:
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    break;
-                
-            }
-
-        } while(option != 2);
+        } while(askRepeat("account"));
     }
 
     private void checkAccountsMenu(){
+        clearScreen();
         int option;
-        ArrayList<Account> accounts = game.getAccounts();
+        List<Account> accounts = game.getAccounts();
 
         do {
             System.out.println("\n=== CHECK ACCOUNTS ===");
@@ -244,7 +196,7 @@ public class Menu {
             System.out.println("0) Back");
             System.out.println("Select: ");
 
-            option = sc.nextInt();
+            option = readInt();
 
             if(option > 0 && option <= accounts.size()) {
                 
@@ -253,13 +205,13 @@ public class Menu {
             } else if (option == 0) {
                 break;
             } else {
-                System.out.println("Invalid option!");
-                break;
+                invalidOption();
             }
 
         } while(option != 0);  
     }
     private void accountMenu(Account a){
+        clearScreen();
         int option;
 
         do {
@@ -271,7 +223,7 @@ public class Menu {
             System.out.println("0) Back");
             System.out.println("Select: ");
 
-            option = sc.nextInt();
+            option = readInt();
 
             switch(option) {
 
@@ -287,16 +239,15 @@ public class Menu {
                 case 0: 
                     break;
                 default:
-                System.out.println("Invalid option!");
-                break;
-                
+                invalidOption();
             }
 
         } while(option != 0);
     }
     private void rewardSourceListMenu(Account a){
+        clearScreen();
         int option;
-        ArrayList<RewardSource> rSources = a.getRewardSources();
+        List<AccountRewardSource> rSources = a.getRewardSources();
 
         do {
             System.out.println("\n=== ACCOUNT: "+a.getUsername()+" ===");
@@ -304,120 +255,106 @@ public class Menu {
 
             for(int i = 0; i < rSources.size(); i++) {
                 if(!rSources.get(i).isRedeemed()){
-                    System.out.println((i+1)+") "+rSources.get(i).getName());
+                    System.out.println((i+1)+") "+rSources.get(i).getName()+"x"+rSources.get(i).getQuantity()+" - "+rSources.get(i).getRewardAmount()+"✦");
                 }
             }
 
             System.out.println("0) Back");
             System.out.println("Select: ");
 
-            option = sc.nextInt();
+            option = readInt();
 
             if(option > 0 && option <= rSources.size()) {
                 
-                RewardSource selected = rSources.get(option-1);
+                AccountRewardSource selected = rSources.get(option-1);
                 rewardSourceMenu(selected, a);
+                break;
             } else if (option == 0) {
                 break;
             } else {
-                System.out.println("Invalid option!");
-                break;
+                invalidOption();
             }
-
         } while(option != 0);
     }
-    private void rewardSourceMenu(RewardSource r, Account a){
+    private void rewardSourceMenu(AccountRewardSource r, Account a){
+        clearScreen();
         int option;
 
         do {
             System.out.println("\n=== SOURCE: "+r.getName()+" ===");
             System.out.println("Game: "+game.getName()+"\n");
 
-            System.out.println(r.getName()+" - "+r.getReward());
+            System.out.println(r.getName()+"x"+r.getQuantity()+" - "+r.getRewardAmount()+"✦");
+            System.out.println("Redeemed: "+r.getRedeemedQuantity()+"; Remaining - "+r.getRemainingRedeemed());
+            System.out.println("Total primogems - "+r.getTotalReward());
 
-            if (r.isRedeemed()) {
-                System.out.println("\n1)Unmark as redeemed");
-            } else {            
-                System.out.println("\n1)Mark as redeemed");
+            if (!r.isRedeemed()) {
+                System.out.println("\n1) Mark as redeemed");
+            }
+            if (r.getRedeemedQuantity() > 0) {
+                System.out.println("\n2) Unmark as redeemed");
+            }
+            if (r.getQuantity() > 1 && !r.isRedeemed()) {
+                System.out.println("3) Mark all as redeemed");
+            }
+            if (r.getQuantity() > 1 && r.getRedeemedQuantity() > 0) {
+                System.out.println("4) Unmark all as redeemed");
             }
             System.out.println("0) Back");
             System.out.println("Select: ");
 
-            option = sc.nextInt();
+            option = readInt();
 
             switch(option) {
-
                 case 1:
-                    redeemUnredeem(r, a);
+                    rewardService.addRewardQuantity(r, a);
+                    break;
+                case 2:
+                    rewardService.remRewardQuantity(r, a);
+                    break;
+                case 3:
+                    rewardService.markAllRewards(r, a);
+                    break;
+                case 4:
+                    rewardService.unmarkAllRewards(r, a);
                     break;
                 case 0: 
                     break;
                 default:
-                System.out.println("Invalid option!");
-                break;
+                invalidOption();
             }
         } while(option != 0);
     }
 
-    private void redeemUnredeem(RewardSource r, Account a){
-        int option;
-
-            System.out.println("Does this affect your balance?");
-            System.out.println("1) Yes - 2) No");
-            System.out.println("Select: ");
-
-            option = sc.nextInt();
-
-            if (r.isRedeemed()) {
-                r.setRedeemed(false);
-            } else {            
-                r.setRedeemed(true);
-            }
-
-            switch (option) {
-                case 1:
-                    if (r.isRedeemed()) {
-                        a.sum(r.getReward());
-                    } else {            
-                        a.subtract(r.getReward());
-                    }
-                    break;
-                case 2:
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    break;
-            }
-    }
     private void progressMenu(Account a){
+        clearScreen();
         int option;
-        int remain = a.getCurrentGoal().getPrice() - a.getBalance() - (a.getPity() * 160);
 
         do {
             System.out.println("\n=== ACCOUNT: "+a.getUsername()+" ===");
             System.out.println("Game: "+game.getName()+"\n");
-            System.out.println("Progress - "+a.getProgressPercentage()+"%");
-            System.out.println("Balance: "+a.getBalance()+"✦("+toWishes(a.getBalance())+"wishes)");
-            System.out.println("Goal: "+a.getCurrentGoal().getPrice()+"✦("+toWishes(a.getCurrentGoal().getPrice())+"wishes)");
-            System.out.println("\nRemaining: "+remain+"✦("+toWishes(remain)+"wishes)");
-            System.out.println("\nAvaiable rewards: "+a.getAllRewards()+"✦("+toWishes(a.getAllRewards())+"wishes)");
+            System.out.println("Progress - "+a.getProgressPercentage()+"% / 100%");
+            System.out.println("Balance: "+a.getBalance()+"✦ ("+toWishes(a.getBalance())+" wishes)");
+            System.out.println("Goal: "+a.getCurrentGoal().getName()+" - "+a.getCurrentGoal().getTotalPrice()+"✦ ("+toWishes(a.getCurrentGoal().getPrice())+" wishes)");
+            System.out.println("\nRemaining: "+a.getRemainingAmount()+"✦ ("+toWishes(a.getRemainingAmount())+" wishes)");
+            System.out.println("\nAvaiable rewards: "+a.getAllRewards()+"✦ ("+toWishes(a.getAllRewards())+" wishes)");
 
             System.out.println("0) Back");
             System.out.println("Select: ");
 
-            option = sc.nextInt();
+            option = readInt();
 
             if(option == 0){
                 break;
             } else {
-                System.out.println("Invalid option!");
-                break;
+                invalidOption();
             }           
 
         } while(option != 0);
     }
 
     private void editAccountMenu(Account a) {
+        clearScreen();
         int option;
 
         do {
@@ -425,39 +362,43 @@ public class Menu {
             System.out.println("\n1)Set currency balance");
             System.out.println("2)Set current pity");
             System.out.println("3)Set current objective");
+            System.out.println("4)Set avaiable rewards");
             System.out.println("0)Back");
             System.out.println("Select: ");
 
-            option = sc.nextInt();
+            option = readInt();
 
             switch(option) {
 
                 case 1:
                     System.out.println("Current balance: ");
-                    int b = sc.nextInt();
+                    int b = readInt();
                     a.setBalance(b);
                     break;
                 case 2:
                     System.out.println("Current pity: ");
-                    int p = sc.nextInt();
+                    int p = readInt();
                     a.setPity(p);
                     break;
                 case 3:
                     pickCurrentGoal(a);
                     break;
+                case 4:
+                    setRewardList(a);
+                    break;
                 case 0:
                     break;
                 default:
-                System.out.println("Invalid option!");
-                break;
+                invalidOption();
             }
 
         } while(option != 0);
     }
 
     private void pickCurrentGoal(Account a){
+        clearScreen();
         int option;
-        ArrayList<Goal> goals = game.getAvailableGoals();
+        List<GoalTemplate> goals = game.getAvailableGoals();
 
         do {
             System.out.println("\n=== AVAIABLE GOALS ===");
@@ -468,20 +409,103 @@ public class Menu {
             System.out.println("0) Back");
             System.out.println("Select: ");
 
-            option = sc.nextInt();
+            option = readInt();
 
             if(option > 0 && option <= goals.size()) {
-                a.setCurrentGoal(goals.get(option-1));
+                System.out.println("How many ones? ");
+
+                int quantity = readInt();
+                AccountGoal selected = new AccountGoal(goals.get(option-1), quantity);
+
+                a.setCurrentGoal(selected);
             } else if (option == 0) {
                 break;
             } else {
-                System.out.println("Invalid option!");
-                break;
+                invalidOption();
             }
         } while(option != 0);  
     }
 
-    private int toWishes(int p){
+    private void setRewardList(Account a){
+        clearScreen();
+        int option;
+        List<RewardTemplate> templates = game.getAvailableRewards();
+        //Adicionar comparação, caso esteja na lista padrão de game, listar como presente e definir a quantidade, se não, não marcar como presente
+
+        do {
+            System.out.println("\n=== ACCOUNT: "+a.getUsername()+" ===");
+            System.out.println("Game: "+game.getName()+"\n");
+
+            for(int i = 0; i < templates.size(); i++) {
+
+                RewardTemplate t = templates.get(i);
+                AccountRewardSource existing = accountService.findReward(a, t);
+
+                if(existing != null) {
+                    System.out.println((i + 1) + ") [+] " + templates.get(i).getName() + "x"+existing.getQuantity()+" - " + templates.get(i).getReward() + "✦");
+                } else {
+                    System.out.println((i + 1) + ") [-] " + templates.get(i).getName() + " - " + templates.get(i).getReward() + "✦");
+                }
+            }
+
+            System.out.println("0) Back");
+            System.out.println("Select to toggle: ");
+
+            option = readInt();
+
+            if(option > 0 && option <= templates.size()) {
+                RewardTemplate selected = templates.get(option-1);
+                AccountRewardSource existing = accountService.findReward(a, selected);
+
+                if (existing != null) {
+                    a.getRewardSources().remove(existing);
+                } else {
+                    System.out.println("How many: ");
+                    int quantity = readInt();
+                    AccountRewardSource ar = new AccountRewardSource(selected, quantity);
+                    a.getRewardSources().add(null);
+                }
+                break;
+            } else if (option == 0) {
+                break;
+            } else {
+                invalidOption();
+            }
+        } while(option != 0);
+    }
+
+    private int toWishes(int p) {
         return (int) p / 160;
+    }
+
+    private void invalidOption() {
+        System.out.println("Invalid option!");
+    }
+
+    private boolean askRepeat(String entity) {
+        System.out.println("\nDo you want to add another "+entity+"?");
+        System.out.println("1) Yes - 2) No\n");
+        System.out.println("Select: ");
+
+        int option = readInt();
+
+        return option == 1;
+    }
+
+    private int readInt() {
+        int value = sc.nextInt();
+        sc.nextLine();
+
+        return value;
+    }
+
+    private String readString() {
+        return sc.nextLine().trim();
+    }
+
+    private void clearScreen() {
+        for(int i = 0; i < 40; i++) {
+            System.out.println();
+        }
     }
 }
