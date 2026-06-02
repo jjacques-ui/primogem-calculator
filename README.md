@@ -1,13 +1,15 @@
 # ✦ PRIMO CALC ✦
 
-> “One more pull surely won't hurt...” :3
+> "One more pull surely won't hurt..." :3
 
-A small terminal-based Java project focused on tracking gacha progression, primogems and pulling goals ☆
+A small Java project focused on tracking gacha progression, primogems, pity and pulling goals ☆
 
 Currently made for:
+
 - Genshin Impact ✦
 
 Future plans:
+
 - Honkai: Star Rail 🚄
 - Zenless Zone Zero ⚡
 - Other gacha games maybe...? >w<
@@ -16,60 +18,102 @@ Future plans:
 
 # ✦ About
 
-Primo Calc is a study-oriented Java project created to practice:
+Primo Calc is a study-oriented Java project created to practice and connect multiple programming concepts through a subject I already enjoy.
 
-⭐ Object-Oriented Programming  
-⭐ Service Layer Architecture  
-⭐ State Management  
-⭐ Collections and Lists  
-⭐ Menu Navigation  
-⭐ Domain Modeling  
-⭐ Future JSON Persistence  
+The project started as a simple terminal application and gradually evolved while new concepts were learned and applied.
 
-The project is intentionally being developed step-by-step as a learning experience.
+This is NOT intended to be a production-ready application.
 
-This is NOT intended to be a production-ready application — it's a progression project made to connect programming studies with personal interests and make the learning process more fun and less intimidating :D
+Instead, it serves as:
+
+⭐ a learning sandbox  
+⭐ a portfolio of personal progress  
+⭐ a place to experiment with architecture decisions  
+⭐ a way to revisit older code and compare growth over time
+
+---
+
+# ✦ Technologies
+
+☕ Java 21
+
+📦 Maven
+
+🗂 Jackson Databind
+
+💻 VS Code
 
 ---
 
 # ✦ Current Features
 
 ## 🌠 Account System
+
 - Multiple accounts
-- Balance management
+- Balance tracking
 - Pity tracking
-- Goal selection
+- Goal assignment
+- Progress calculation
 
 ## 🌌 Reward System
+
 - Reward templates
-- Per-account reward states
-- Redeemed tracking
-- Quantity system
+- Account-specific reward instances
+- Quantity support
+- Redeemed progress tracking
 
 ## ✨ Goal System
+
 - Goal templates
-- Multi-goal quantity support
-- Progress calculation
-- Remaining currency tracking
+- Quantity multiplier support
+- Remaining currency calculation
+- Pull estimation
+
+## 💾 Persistence System
+
+- Save accounts to JSON
+- Load accounts from JSON
+- Save reward templates
+- Load reward templates
+- Save goal templates
+- Load goal templates
 
 ## 🖥 Terminal UI
+
 - Multi-screen navigation
 - Dynamic menus
-- Toggle-based selection
-- Helper methods for cleaner UI
+- Toggle-based reward selection
+- Helper display methods
+- Simple screen transitions
 
 ---
 
-# ✦ Project Structure
+# ✦ Architecture
+
+The project currently follows a simple layered structure:
 
 ```text
 src/
- └── app/
-      ├── Main.java
-      │
-      ├── menu/
-      ├── model/
-      └── service/
+└── main/
+    └── java/
+        └── primocalc/
+            │
+            ├── Main.java
+            │
+            ├── model/
+            │     Account
+            │     AccountGoal
+            │     AccountRewardSource
+            │     GoalTemplate
+            │     RewardTemplate
+            │
+            ├── service/
+            │     AccountService
+            │     RewardService
+            │     SaveService
+            │
+            └── menu/
+                  Menu
 ```
 
 ---
@@ -77,56 +121,126 @@ src/
 # ✦ Current Version
 
 ```text
-V2.1
+V3.0
 ```
 
-Current focus:
-- improving architecture,
-- organizing responsibilities,
-- preparing for JSON persistence.
+### Codename
+
+⭐ Maven Object Permanence ⭐
+
+Main milestone:
+
+- Migration to Maven
+- Jackson integration
+- JSON persistence
+- Automatic loading/saving
+- Better project organization
+
+---
+
+# ✦ What was learned so far
+
+## ☕ Java
+
+- Classes and Objects
+- Encapsulation
+- Constructors
+- Composition
+- Collections
+- ArrayList
+- Service Layer
+- Separation of Responsibilities
+
+## 📦 Maven
+
+- Dependency Management
+- Project Structure
+- Build Lifecycle
+- External Libraries
+
+## 🗂 Jackson
+
+- Serialization
+- Deserialization
+- JSON Mapping
+- Object Persistence
 
 ---
 
 # ✦ Planned Features
 
-## 🚀 V3
-- JSON save/load system
-- Persistent accounts
-- Safer validations
-- Better exception handling
+## 🚀 V3.x
+
+- Better validation
+- Safer loading process
+- Data migration support
+- Improved save structure
+
+## 🌠 V4
+
+- React Front-End
+- REST API integration
+- Better UX
+- Cleaner architecture
 
 ## 🌌 Future
+
 - Multi-game support
-- Better UI
-- Statistics/history system
-- Possible front-end version
+- Statistics dashboard
+- Reward history
+- Pull simulation
+- Banner planner
 
 ---
 
 # ✦ Why this project exists
 
-This project exists mostly as a way to:
-- practice programming,
-- experiment with new concepts,
-- create something connected to personal interests,
-- and track long-term improvement over time ☆
+This project mainly exists to:
 
-Every version is intentionally kept as a milestone of the learning process.
+- practice programming;
+- learn new concepts;
+- make mistakes and understand why they happen;
+- connect studies with personal interests;
+- keep a record of long-term improvement.
+
+Every version intentionally preserves part of the learning journey.
+
+Some solutions may not be perfect.
+
+That's actually part of the point ☆
 
 ---
 
 # ✦ Github
 
-```
-original-dev: jjaques-ui
-https://github.com/jjacques-ui
+```text
+original-dev:
+your-github-name
 
+repository:
+https://github.com/your-user/your-repository
 ```
+
+---
+
+# ✦ Development Notes
+
+Current persistence files:
+
+```text
+accounts.json
+rewardTemplates.json
+goalTemplates.json
+```
+
+These files are intended for local testing and may be ignored by Git depending on the project's needs.
 
 ---
 
 # ✦ Status
 
-Still under development ✦
+Currently under development 🌠
 
-The stars are not guaranteed... but the bugs probably are :')
+The stars are not guaranteed...
+
+but the pity system certainly is. ✦ >w<
